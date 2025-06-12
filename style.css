@@ -1,0 +1,200 @@
+body {
+  margin: 0;
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(to right, #ff9a9e, #fad0c4);
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.container {
+  text-align: center;
+  background: white;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 8px 30px rgba(0,0,0,0.2);
+  position: relative;
+}
+
+h1 {
+  color: #d81b60;
+  font-size: 2.5em;
+}
+
+.message {
+  font-size: 1.2em;
+  margin: 20px 0;
+}
+
+button {
+  background-color: #ec407a;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 30px;
+  font-size: 1em;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+button:hover {
+  background-color: #d81b60;
+}
+
+#surpresa {
+  margin-top: 20px;
+  font-weight: bold;
+  color: #c2185b;
+}
+
+.hearts::before, .hearts::after {
+  content: "❤️ 💕 💖 💘 💝";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  font-size: 2rem;
+  animation: float 8s infinite linear;
+}
+
+@keyframes float {
+  0% { transform: translate(-50%, 0); opacity: 1; }
+  100% { transform: translate(-50%, -120vh); opacity: 0; }
+}
+.hearts-bg {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  z-index: -1;
+}
+
+.hearts-bg::after {
+  content: "💗 💖 💘 💝 💞";
+  font-size: 2rem;
+  animation: floatUp 12s linear infinite;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+@keyframes floatUp {
+  0% { top: 100%; opacity: 1; }
+  100% { top: -10%; opacity: 0; }
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 999;
+  padding-top: 100px;
+  left: 0; top: 0;
+  width: 100%; height: 100%;
+  background-color: rgba(0,0,0,0.7);
+}
+
+.modal-content {
+  background-color: #fff;
+  margin: auto;
+  padding: 30px;
+  border-radius: 10px;
+  width: 80%;
+  max-width: 500px;
+  text-align: center;
+}
+
+.modal-content img {
+  width: 100%;
+  max-width: 300px;
+  height: auto;
+  border-radius: 10px;
+  margin: 20px auto;
+  display: block;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+}
+
+
+.close {
+  color: #d81b60;
+  float: right;
+  font-size: 24px;
+  cursor: pointer;
+}
+
+#surpresa {
+  margin-top: 20px;
+  font-weight: bold;
+  color: #c2185b;
+  text-align: center;
+}
+
+#surpresa img {
+  max-width: 100%;
+  max-height: 250px;  /* altura máxima pra não estourar */
+  border-radius: 15px;
+  margin-top: 12px;
+  box-shadow: 0 6px 15px rgba(194, 24, 91, 0.5);
+  object-fit: cover; /* mantém proporção e preenche a área */
+  transition: transform 0.3s ease;
+  cursor: pointer;
+}
+
+#surpresa img:hover {
+  transform: scale(1.05);
+  box-shadow: 0 8px 20px rgba(194, 24, 91, 0.7);
+}
+
+
+
+.flip-card {
+  background-color: transparent;
+  width: 100%;
+  max-width: 350px;
+  margin: 20px auto 0;
+  perspective: 1000px;
+  cursor: pointer;
+}
+
+.flip-card-inner {
+  position: relative;
+  width: 100%;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+}
+
+.flip-card.flipped .flip-card-inner {
+  transform: rotateY(180deg);
+}
+
+.flip-card-front, .flip-card-back {
+  position: absolute;
+  width: 100%;
+  backface-visibility: hidden;
+  border-radius: 15px;
+  box-shadow: 0 4px 15px rgba(194, 24, 91, 0.5);
+  padding: 15px;
+  background: white;
+  user-select: none;
+}
+
+.flip-card-front img {
+  width: 100%;
+  border-radius: 15px;
+  object-fit: cover;
+  margin-top: 10px;
+  max-height: 200px;
+}
+
+.flip-card-back {
+  transform: rotateY(180deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  color: #d81b60;
+  font-size: 1.2em;
+  text-align: center;
+  padding: 40px 15px;
+}

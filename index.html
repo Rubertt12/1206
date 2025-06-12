@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Dia dos Namorados Marvel - Amor que é poder</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Dancing+Script&family=Roboto:wght@400;700&display=swap');
+
+  body {
+    margin: 0;
+    background: linear-gradient(135deg, #8b0000, #ff5f6d);
+    color: #fff0f5;
+    font-family: 'Roboto', sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 30px 15px;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  h1 {
+    font-family: 'Dancing Script', cursive;
+    font-size: 4rem;
+    margin-bottom: 15px;
+    text-shadow: 0 0 10px #ff4466;
+  }
+
+  .photo-container {
+    width: 360px;
+    height: 360px;
+    border-radius: 50%;
+    border: 6px solid #fff0f5;
+    overflow: hidden;
+    box-shadow: 0 0 25px 6px #ff4466cc;
+    margin: 25px auto;
+    background: #330000;
+  }
+
+  .photo-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    transition: opacity 1s ease-in-out;
+  }
+
+  .phrase {
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.9rem;
+    max-width: 720px;
+    margin: 20px auto 50px;
+    line-height: 1.5;
+    font-weight: 700;
+    text-shadow: 2px 2px 6px #7a0c0c;
+    min-height: 110px;
+    padding: 0 10px;
+  }
+
+  footer {
+    margin-top: 40px;
+    font-size: 1rem;
+    color: #ffe6f0cc;
+    font-style: italic;
+  }
+
+  /* Corações flutuantes */
+  .heart {
+    position: fixed;
+    width: 25px;
+    height: 25px;
+    background: #ff4466;
+    transform: rotate(-45deg);
+    top: 100%;
+    animation: floatUp 7s linear infinite;
+    opacity: 0.8;
+    border-radius: 5px 5px 0 0;
+    filter: drop-shadow(0 0 4px #ff6a85);
+  }
+  .heart::before,
+  .heart::after {
+    content: "";
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    background: #ff4466;
+    border-radius: 50%;
+  }
+  .heart::before {
+    top: -12.5px;
+    left: 0;
+  }
+  .heart::after {
+    left: 12.5px;
+    top: 0;
+  }
+  @keyframes floatUp {
+    0% {
+      transform: translateY(0) rotate(-45deg);
+      opacity: 0.8;
+    }
+    100% {
+      transform: translateY(-110vh) rotate(-45deg);
+      opacity: 0;
+    }
+  }
+
+  /* Estilo do temporizador */
+  #countdown {
+    font-family: 'Dancing Script', cursive;
+    font-size: 2.5rem;
+    margin: 20px auto;
+    color: #ffe6f0;
+    text-shadow: 1px 1px 5px #7a0c0c;
+  }
+
+  /* Tela de bloqueio */
+  #lockedOverlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(135deg, #8b000099, #ff5f6dcc);
+    color: #fff0f5;
+    font-family: 'Dancing Script', cursive;
+    font-size: 2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    padding: 20px;
+    text-align: center;
+  }
+
+  #musicControl {
+    margin-top: 20px;
+    background: #ff4466cc;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 30px;
+    cursor: pointer;
+    font-family: 'Dancing Script', cursive;
+    font-size: 1.2rem;
+    box-shadow: 0 0 10px #ff4466;
+  }
+</style>
+</head>
+<body>
+
+  <div id="lockedOverlay" style="display:none;">
+    <div>O site será liberado em:</div>
+    <div id="countdown">00:00:00</div>
+    <small>Espere um pouquinho... o amor vale a pena!</small>
+  </div>
+
+  <h1>Valentines Day</h1>
+
+  <div class="photo-container">
+    <img id="photo" src="" alt="Foto romântica Marvel" />
+  </div>
+
+  <div class="phrase" id="phrase"></div>
+
+  <footer>Para o amor da minha vida <3 .</footer>
+
+  <!-- Player de música -->
+  <audio id="romanticMusic" loop>
+    <source src="/musica/Christina Perri - A Thousand Years [Official Music Video].mp3" type="audio/mp3">
+    Seu navegador não suporta áudio.
+  </audio>
+  <button id="musicControl">▶️ Tocar Música</button>
+
+  <script>
+    // Data para liberar o site
+    const releaseDate = new Date('2025-06-12T00:00:00');
+
+    // Elementos do DOM
+    const lockedOverlay = document.getElementById('lockedOverlay');
+    const countdownEl = document.getElementById('countdown');
+    const bodyContent = document.body;
+    const music = document.getElementById('romanticMusic');
+    const musicControl = document.getElementById('musicControl');
+
+    // Função para formatar tempo em HH:MM:SS
+    function formatTime(ms) {
+      const totalSeconds = Math.floor(ms / 1000);
+      const hours = String(Math.floor(totalSeconds / 3600)).padStart(2, '0');
+      const minutes = String(Math.floor((totalSeconds % 3600) / 60)).padStart(2, '0');
+      const seconds = String(totalSeconds % 60).padStart(2, '0');
+      return `${hours}:${minutes}:${seconds}`;
+    }
+
+    function checkRelease() {
+      const now = new Date();
+      if (now < releaseDate) {
+        // Mostrar tela bloqueada e contador
+        lockedOverlay.style.display = 'flex';
+        bodyContent.style.overflow = 'hidden'; // bloqueia scroll
+
+        const diff = releaseDate - now;
+        countdownEl.textContent = formatTime(diff);
+        return false;
+      } else {
+        // Liberar site
+        lockedOverlay.style.display = 'none';
+        bodyContent.style.overflow = 'auto';
+        return true;
+      }
+    }
+
+    // Atualiza contador a cada segundo
+    let siteLiberado = checkRelease();
+    if (!siteLiberado) {
+      const interval = setInterval(() => {
+        siteLiberado = checkRelease();
+        if (siteLiberado) clearInterval(interval);
+      }, 1000);
+    }
+
+    // --------- Slideshow de frases e fotos -------------
+    const slides = [
+      {
+        phrase: '“Eu nunca fui só um herói. Eu sempre fui seu.” ',
+        photo: '/fotos/WhatsApp Image 2025-06-10 at 13.57.39.jpeg'
+      },
+      {
+        phrase: '“Você é a minha força, meu lar, minha razão para lutar.” ',
+        photo: '/fotos/praia.jpeg'
+      },
+      {
+        phrase: '“No meio do caos, você é a minha paz.” ',
+        photo: '/fotos/WhatsApp Image 2025-06-10 at 13.57.39.jpeg'
+      },
+      {
+        phrase: '“Eu escolho você, todos os dias, até o fim do universo.” ',
+        photo: '/fotos/WhatsApp Image 2025-06-11 at 22.25.53 (1).jpeg'
+      },
+      {
+        phrase: '“Nosso amor é mais forte que qualquer poder.” ',
+        photo: '/fotos/WhatsApp Image 2025-06-11 at 22.25.53.jpeg'
+      },
+    ];
+
+    let index = 0;
+    const phraseEl = document.getElementById('phrase');
+    const photoEl = document.getElementById('photo');
+
+    function showSlide(i) {
+      photoEl.style.opacity = 0;
+      phraseEl.style.opacity = 0;
+
+      setTimeout(() => {
+        phraseEl.textContent = slides[i].phrase;
+        photoEl.src = slides[i].photo;
+
+        photoEl.style.opacity = 1;
+        phraseEl.style.opacity = 1;
+      }, 500);
+    }
+
+    if(siteLiberado){
+      showSlide(index);
+      setInterval(() => {
+        index = (index + 1) % slides.length;
+        showSlide(index);
+      }, 7000);
+    }
+
+    // Corações flutuantes
+    function createHeart() {
+      if(!siteLiberado) return;
+      const heart = document.createElement('div');
+      heart.classList.add('heart');
+      heart.style.left = Math.random() * 100 + 'vw';
+      heart.style.animationDuration = 5 + Math.random() * 5 + 's';
+      heart.style.opacity = Math.random() * 0.8 + 0.2;
+      document.body.appendChild(heart);
+
+      setTimeout(() => {
+        heart.remove();
+      }, 10000);
+    }
+
+    setInterval(createHeart, 500);
+
+    // Controle da música
+    musicControl.addEventListener('click', () => {
+      if (music.paused) {
+        music.play();
+        musicControl.textContent = '⏸️ Pausar Música';
+      } else {
+        music.pause();
+        musicControl.textContent = '▶️ Tocar Música';
+      }
+    });
+  </script>
+</body>
+</html>
